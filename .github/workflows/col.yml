@@ -1,0 +1,20 @@
+name: Cleanup Old Log
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [col]
+  schedule:
+    - cron: '*/5 * * * *'
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete old logs
+        env:
+          OWNER: ${{ github.repository_owner }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+
+        run: |
+          curl -sH "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/repos/$OWNER/code_test/actions/runs" | jq '.workflow_runs[] | select([.status]|inside(["in_progress","queued"])|not) | .id' | xargs -I {} curl -sX DELETE -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/repos/$OWNER/code_test/actions/runs/{}" > /dev/null 2>&1
